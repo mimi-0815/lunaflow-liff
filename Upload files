@@ -1,0 +1,309 @@
+{\rtf1\ansi\ansicpg932\cocoartf2865
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red24\green30\blue42;\red246\green249\blue251;}
+{\*\expandedcolortbl;;\cssrgb\c12157\c16078\c21569;\cssrgb\c97255\c98039\c98824;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2   1	<!DOCTYPE html>\
+     2	<html lang="ja">\
+     3	<head>\
+     4	  <meta charset="UTF-8">\
+     5	  <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+     6	  <title>LunaFlow \uc0\u27770 \u28168 </title>\
+     7	  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>\
+     8	  <style>\
+     9	    * \{\
+    10	      margin: 0;\
+    11	      padding: 0;\
+    12	      box-sizing: border-box;\
+    13	    \}\
+    14	    body \{\
+    15	      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;\
+    16	      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\
+    17	      min-height: 100vh;\
+    18	      display: flex;\
+    19	      align-items: center;\
+    20	      justify-content: center;\
+    21	      padding: 20px;\
+    22	    \}\
+    23	    .container \{\
+    24	      background: white;\
+    25	      border-radius: 20px;\
+    26	      padding: 40px 30px;\
+    27	      max-width: 400px;\
+    28	      width: 100%;\
+    29	      box-shadow: 0 10px 40px rgba(0,0,0,0.2);\
+    30	    \}\
+    31	    h1 \{\
+    32	      font-size: 28px;\
+    33	      color: #333;\
+    34	      margin-bottom: 10px;\
+    35	      text-align: center;\
+    36	    \}\
+    37	    .subtitle \{\
+    38	      color: #666;\
+    39	      text-align: center;\
+    40	      margin-bottom: 30px;\
+    41	      font-size: 14px;\
+    42	    \}\
+    43	    .plan-select \{\
+    44	      margin-bottom: 30px;\
+    45	    \}\
+    46	    .plan-option \{\
+    47	      border: 2px solid #e0e0e0;\
+    48	      border-radius: 12px;\
+    49	      padding: 20px;\
+    50	      margin-bottom: 12px;\
+    51	      cursor: pointer;\
+    52	      transition: all 0.3s;\
+    53	      display: flex;\
+    54	      justify-content: space-between;\
+    55	      align-items: center;\
+    56	    \}\
+    57	    .plan-option:hover \{\
+    58	      border-color: #667eea;\
+    59	      background: #f8f9ff;\
+    60	      transform: translateY(-2px);\
+    61	    \}\
+    62	    .plan-option.selected \{\
+    63	      border-color: #667eea;\
+    64	      background: #f8f9ff;\
+    65	      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);\
+    66	    \}\
+    67	    .plan-info \{\
+    68	      flex: 1;\
+    69	    \}\
+    70	    .plan-name \{\
+    71	      font-weight: bold;\
+    72	      color: #333;\
+    73	      margin-bottom: 5px;\
+    74	      font-size: 16px;\
+    75	    \}\
+    76	    .plan-price \{\
+    77	      color: #667eea;\
+    78	      font-size: 24px;\
+    79	      font-weight: bold;\
+    80	    \}\
+    81	    .plan-check \{\
+    82	      font-size: 24px;\
+    83	      opacity: 0;\
+    84	      transition: opacity 0.3s;\
+    85	    \}\
+    86	    .plan-option.selected .plan-check \{\
+    87	      opacity: 1;\
+    88	    \}\
+    89	    .btn \{\
+    90	      width: 100%;\
+    91	      padding: 16px;\
+    92	      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\
+    93	      color: white;\
+    94	      border: none;\
+    95	      border-radius: 12px;\
+    96	      font-size: 16px;\
+    97	      font-weight: bold;\
+    98	      cursor: pointer;\
+    99	      transition: all 0.3s;\
+   100	      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);\
+   101	    \}\
+   102	    .btn:hover:not(:disabled) \{\
+   103	      transform: translateY(-2px);\
+   104	      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);\
+   105	    \}\
+   106	    .btn:disabled \{\
+   107	      opacity: 0.5;\
+   108	      cursor: not-allowed;\
+   109	      transform: none;\
+   110	    \}\
+   111	    .status \{\
+   112	      text-align: center;\
+   113	      margin-top: 20px;\
+   114	      color: #666;\
+   115	      font-size: 14px;\
+   116	    \}\
+   117	    .error \{\
+   118	      color: #e74c3c;\
+   119	      background: #fee;\
+   120	      padding: 12px;\
+   121	      border-radius: 8px;\
+   122	      margin-bottom: 20px;\
+   123	      font-size: 14px;\
+   124	      text-align: center;\
+   125	    \}\
+   126	    .loading \{\
+   127	      text-align: center;\
+   128	      padding: 40px;\
+   129	    \}\
+   130	    .spinner \{\
+   131	      border: 3px solid #f3f3f3;\
+   132	      border-top: 3px solid #667eea;\
+   133	      border-radius: 50%;\
+   134	      width: 40px;\
+   135	      height: 40px;\
+   136	      animation: spin 1s linear infinite;\
+   137	      margin: 0 auto 20px;\
+   138	    \}\
+   139	    @keyframes spin \{\
+   140	      0% \{ transform: rotate(0deg); \}\
+   141	      100% \{ transform: rotate(360deg); \}\
+   142	    \}\
+   143	  </style>\
+   144	</head>\
+   145	<body>\
+   146	  <div class="container">\
+   147	    <div id="loading" class="loading">\
+   148	      <div class="spinner"></div>\
+   149	      <div class="status">\uc0\u21021 \u26399 \u21270 \u20013 ...</div>\
+   150	    </div>\
+   151	    \
+   152	    <div id="main" style="display:none;">\
+   153	      <h1>\uc0\u55356 \u57113  LunaFlow</h1>\
+   154	      <p class="subtitle">\uc0\u12503 \u12521 \u12531 \u12434 \u36984 \u25246 \u12375 \u12390 \u27770 \u28168 \u12395 \u36914 \u12416 </p>\
+   155	      \
+   156	      <div id="error" class="error" style="display:none;"></div>\
+   157	      \
+   158	      <div class="plan-select">\
+   159	        <div class="plan-option" data-plan="light">\
+   160	          <div class="plan-info">\
+   161	            <div class="plan-name">\uc0\u10024  Light \u12503 \u12521 \u12531 </div>\
+   162	            <div class="plan-price">\'a51,000</div>\
+   163	          </div>\
+   164	          <div class="plan-check">\uc0\u10003 </div>\
+   165	        </div>\
+   166	        <div class="plan-option selected" data-plan="standard">\
+   167	          <div class="plan-info">\
+   168	            <div class="plan-name">\uc0\u55357 \u56491  Standard \u12503 \u12521 \u12531 </div>\
+   169	            <div class="plan-price">\'a53,000</div>\
+   170	          </div>\
+   171	          <div class="plan-check">\uc0\u10003 </div>\
+   172	        </div>\
+   173	        <div class="plan-option" data-plan="premium">\
+   174	          <div class="plan-info">\
+   175	            <div class="plan-name">\uc0\u11088  Premium \u12503 \u12521 \u12531 </div>\
+   176	            <div class="plan-price">\'a55,000</div>\
+   177	          </div>\
+   178	          <div class="plan-check">\uc0\u10003 </div>\
+   179	        </div>\
+   180	      </div>\
+   181	      \
+   182	      <button class="btn" id="payBtn">\uc0\u27770 \u28168 \u12506 \u12540 \u12472 \u12408 \u36914 \u12416 </button>\
+   183	      <div class="status" id="status">\uc0\u28310 \u20633 \u23436 \u20102 </div>\
+   184	    </div>\
+   185	  </div>\
+   186	\
+   187	  <script>\
+   188	    // ========== \uc0\u35373 \u23450  ==========\
+   189	    const CONFIG = \{\
+   190	      LIFF_ID: '2008358460-7ZLAoV3K',\
+   191	      STRIPE_LINKS: \{\
+   192	        light: 'https://buy.stripe.com/test_00wdR90j8fprfVo7pjc7u01',\
+   193	        standard: 'https://buy.stripe.com/test_5kQ6oHd5U6SV24y9xrc7u00',\
+   194	        premium: 'https://buy.stripe.com/test_9B6aEXc1Q6SVbF810Vc7u02'\
+   195	      \}\
+   196	    \};\
+   197	    \
+   198	    let selectedPlan = 'standard';\
+   199	    let userProfile = null;\
+   200	    \
+   201	    // ========== \uc0\u21021 \u26399 \u21270  ==========\
+   202	    window.onload = async function() \{\
+   203	      try \{\
+   204	        // LIFF\uc0\u21021 \u26399 \u21270 \
+   205	        await liff.init(\{ liffId: CONFIG.LIFF_ID \});\
+   206	        \
+   207	        // \uc0\u12525 \u12464 \u12452 \u12531 \u30906 \u35469 \
+   208	        if (!liff.isLoggedIn()) \{\
+   209	          liff.login();\
+   210	          return;\
+   211	        \}\
+   212	        \
+   213	        // \uc0\u12503 \u12525 \u12501 \u12451 \u12540 \u12523 \u21462 \u24471 \
+   214	        userProfile = await liff.getProfile();\
+   215	        \
+   216	        // UI\uc0\u34920 \u31034 \
+   217	        document.getElementById('loading').style.display = 'none';\
+   218	        document.getElementById('main').style.display = 'block';\
+   219	        \
+   220	        // \uc0\u12503 \u12521 \u12531 \u36984 \u25246 \u12452 \u12505 \u12531 \u12488 \
+   221	        setupPlanSelection();\
+   222	        \
+   223	        // \uc0\u27770 \u28168 \u12508 \u12479 \u12531 \u12452 \u12505 \u12531 \u12488 \
+   224	        setupPaymentButton();\
+   225	        \
+   226	      \} catch (error) \{\
+   227	        showError('\uc0\u21021 \u26399 \u21270 \u12456 \u12521 \u12540 : ' + error.message);\
+   228	        console.error('LIFF Init Error:', error);\
+   229	      \}\
+   230	    \};\
+   231	    \
+   232	    // ========== \uc0\u12503 \u12521 \u12531 \u36984 \u25246  ==========\
+   233	    function setupPlanSelection() \{\
+   234	      document.querySelectorAll('.plan-option').forEach(option => \{\
+   235	        option.addEventListener('click', function() \{\
+   236	          document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));\
+   237	          this.classList.add('selected');\
+   238	          selectedPlan = this.getAttribute('data-plan');\
+   239	        \});\
+   240	      \});\
+   241	    \}\
+   242	    \
+   243	    // ========== \uc0\u27770 \u28168 \u12508 \u12479 \u12531  ==========\
+   244	    function setupPaymentButton() \{\
+   245	      document.getElementById('payBtn').addEventListener('click', async function() \{\
+   246	        if (!userProfile) \{\
+   247	          showError('\uc0\u12518 \u12540 \u12470 \u12540 \u24773 \u22577 \u12364 \u21462 \u24471 \u12391 \u12365 \u12414 \u12379 \u12435 \u12391 \u12375 \u12383 ');\
+   248	          return;\
+   249	        \}\
+   250	        \
+   251	        this.disabled = true;\
+   252	        this.textContent = '\uc0\u20966 \u29702 \u20013 ...';\
+   253	        document.getElementById('status').textContent = 'Stripe\uc0\u12506 \u12540 \u12472 \u12408 \u31227 \u21205 \u20013 ...';\
+   254	        \
+   255	        try \{\
+   256	          // URL\uc0\u12497 \u12521 \u12513 \u12540 \u12479 \u12363 \u12425 \u32057 \u20171 \u32773 ID\u12434 \u21462 \u24471 \
+   257	          const urlParams = new URLSearchParams(window.location.search);\
+   258	          const ref = urlParams.get('ref');\
+   259	          let referrerId = '';\
+   260	          \
+   261	          if (ref) \{\
+   262	            try \{\
+   263	              referrerId = atob(ref);\
+   264	            \} catch (e) \{\
+   265	              console.error('Ref decode error:', e);\
+   266	            \}\
+   267	          \}\
+   268	          \
+   269	          // Stripe\uc0\u27770 \u28168 URL\u12434 \u29983 \u25104 \
+   270	          const baseUrl = CONFIG.STRIPE_LINKS[selectedPlan];\
+   271	          const stripeUrl = baseUrl + \
+   272	            '?client_reference_id=' + encodeURIComponent(userProfile.userId) +\
+   273	            '&metadata[plan]=' + encodeURIComponent(selectedPlan) +\
+   274	            '&metadata[referrer_id]=' + encodeURIComponent(referrerId);\
+   275	          \
+   276	          // Stripe\uc0\u12506 \u12540 \u12472 \u12408 \u12522 \u12480 \u12452 \u12524 \u12463 \u12488 \
+   277	          window.location.href = stripeUrl;\
+   278	          \
+   279	        \} catch (error) \{\
+   280	          showError('\uc0\u12456 \u12521 \u12540 \u12364 \u30330 \u29983 \u12375 \u12414 \u12375 \u12383 : ' + error.message);\
+   281	          this.disabled = false;\
+   282	          this.textContent = '\uc0\u27770 \u28168 \u12506 \u12540 \u12472 \u12408 \u36914 \u12416 ';\
+   283	          document.getElementById('status').textContent = '\uc0\u28310 \u20633 \u23436 \u20102 ';\
+   284	        \}\
+   285	      \});\
+   286	    \}\
+   287	    \
+   288	    // ========== \uc0\u12456 \u12521 \u12540 \u34920 \u31034  ==========\
+   289	    function showError(message) \{\
+   290	      const errorDiv = document.getElementById('error');\
+   291	      errorDiv.textContent = message;\
+   292	      errorDiv.style.display = 'block';\
+   293	      document.getElementById('loading').style.display = 'none';\
+   294	      document.getElementById('main').style.display = 'block';\
+   295	    \}\
+   296	  </script>\
+   297	</body>\
+   298	</html>
+\f1 \
+}
