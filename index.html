@@ -7,26 +7,26 @@
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#D4AF87 0%,#C9A882 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .container{background:white;border-radius:20px;padding:40px 30px;max-width:400px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.2)}
 h1{font-size:28px;color:#333;margin-bottom:10px;text-align:center}
 .subtitle{color:#666;text-align:center;margin-bottom:30px;font-size:14px}
 .plan-select{margin-bottom:30px}
 .plan-option{border:2px solid #e0e0e0;border-radius:12px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all 0.3s;display:flex;justify-content:space-between;align-items:center}
-.plan-option:hover{border-color:#667eea;background:#f8f9ff;transform:translateY(-2px)}
-.plan-option.selected{border-color:#667eea;background:#f8f9ff;box-shadow:0 4px 12px rgba(102,126,234,0.2)}
+.plan-option:hover{border-color:#D4AF87;background:#FFF8F0;transform:translateY(-2px)}
+.plan-option.selected{border-color:#D4AF87;background:#FFF8F0;box-shadow:0 4px 12px rgba(212,175,135,0.3)}
 .plan-info{flex:1}
 .plan-name{font-weight:bold;color:#333;margin-bottom:5px;font-size:16px}
-.plan-price{color:#667eea;font-size:24px;font-weight:bold}
-.plan-check{font-size:24px;opacity:0;transition:opacity 0.3s}
+.plan-price{color:#C9A882;font-size:24px;font-weight:bold}
+.plan-check{font-size:24px;opacity:0;transition:opacity 0.3s;color:#D4AF87}
 .plan-option.selected .plan-check{opacity:1}
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 12px rgba(102,126,234,0.3)}
-.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(102,126,234,0.4)}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#D4AF87 0%,#C9A882 100%);color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 12px rgba(212,175,135,0.4)}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(212,175,135,0.5)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .status{text-align:center;margin-top:20px;color:#666;font-size:14px}
 .error{color:#e74c3c;background:#fee;padding:12px;border-radius:8px;margin-bottom:20px;font-size:14px;text-align:center}
 .loading{text-align:center;padding:40px}
-.spinner{border:3px solid #f3f3f3;border-top:3px solid #667eea;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:0 auto 20px}
+.spinner{border:3px solid #f3f3f3;border-top:3px solid #D4AF87;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:0 auto 20px}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
 </head>
@@ -91,6 +91,7 @@ option.addEventListener('click',function(){
 document.querySelectorAll('.plan-option').forEach(o=>o.classList.remove('selected'));
 this.classList.add('selected');
 selectedPlan=this.getAttribute('data-plan');
+console.log('Selected plan:',selectedPlan);
 });
 });
 }
@@ -107,8 +108,11 @@ let referrerId='';
 if(ref){
 try{referrerId=atob(ref);}catch(e){console.error('Ref decode error:',e);}
 }
+console.log('Payment details:',{plan:selectedPlan,userId:userProfile.userId,referrerId:referrerId});
 const baseUrl=CONFIG.STRIPE_LINKS[selectedPlan];
+if(!baseUrl){throw new Error('Invalid plan selected');}
 const stripeUrl=baseUrl+'?client_reference_id='+encodeURIComponent(userProfile.userId)+'&metadata[plan]='+encodeURIComponent(selectedPlan)+'&metadata[referrer_id]='+encodeURIComponent(referrerId);
+console.log('Redirecting to:',stripeUrl);
 window.location.href=stripeUrl;
 }catch(error){
 showError('エラーが発生しました: '+error.message);
