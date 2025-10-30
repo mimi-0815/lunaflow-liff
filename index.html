@@ -32,7 +32,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .logo {
@@ -47,6 +47,22 @@
         .subtitle {
             color: #666;
             font-size: 14px;
+        }
+
+        .notice {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffe6cc 100%);
+            border-left: 4px solid #d4af7a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .notice-title {
+            font-weight: bold;
+            color: #d4af7a;
+            margin-bottom: 5px;
         }
 
         .plan-container {
@@ -82,13 +98,26 @@
             font-size: 28px;
             font-weight: bold;
             color: #d4af7a;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .plan-description {
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
-            line-height: 1.6;
+            line-height: 1.8;
+        }
+
+        .plan-description li {
+            margin-bottom: 4px;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .plan-description li:before {
+            content: "✓ ";
+            color: #d4af7a;
+            font-weight: bold;
+            margin-right: 5px;
         }
 
         .loading {
@@ -128,6 +157,12 @@
             <div class="subtitle">プランを選択してください</div>
         </div>
 
+        <!-- 入会金のお知らせ -->
+        <div class="notice">
+            <div class="notice-title">💰 入会金について</div>
+            入会金：3,980円（全てのプランに共通です）
+        </div>
+
         <div class="plan-container">
             <!-- ライトプラン（¥2,000） -->
             <button class="plan-button" 
@@ -136,9 +171,9 @@
                 <div class="plan-name">💫 ライトプラン</div>
                 <div class="plan-price">¥2,000<span style="font-size: 16px; color: #999;">/月</span></div>
                 <div class="plan-description">
-                    基本的なコンテンツにアクセス<br>
-                    コミュニティ参加<br>
-                    紹介報酬: ¥800
+                    <li>基本的な仕入れ</li>
+                    <li>基本的なコンテンツにアクセス</li>
+                    <li>コミュニティ参加</li>
                 </div>
             </button>
 
@@ -149,9 +184,12 @@
                 <div class="plan-name">⭐ スタンダードプラン</div>
                 <div class="plan-price">¥5,000<span style="font-size: 16px; color: #999;">/月</span></div>
                 <div class="plan-description">
-                    全てのコンテンツにアクセス<br>
-                    優先サポート<br>
-                    紹介報酬: ¥1,600
+                    <li>基本的な仕入れ</li>
+                    <li>Webライブ仕入れ会</li>
+                    <li>教材など</li>
+                    <li>全てのコンテンツにアクセス</li>
+                    <li>優先サポート</li>
+                    <li>アフィリエイト: 3%〜</li>
                 </div>
             </button>
 
@@ -162,9 +200,11 @@
                 <div class="plan-name">👑 プレミアムプラン</div>
                 <div class="plan-price">¥9,000<span style="font-size: 16px; color: #999;">/月</span></div>
                 <div class="plan-description">
-                    全てのコンテンツ + VIP特典<br>
-                    個別コンサルティング<br>
-                    紹介報酬: ¥2,400
+                    <li>スタンダードプランの全内容</li>
+                    <li>Webライブ仕入れ会での質問可能</li>
+                    <li>全てのコンテンツ + VIP特典</li>
+                    <li>個別コンサルティング</li>
+                    <li>アフィリエイト: 5%〜</li>
                 </div>
             </button>
         </div>
