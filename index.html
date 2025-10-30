@@ -137,17 +137,6 @@
             margin-top: 20px;
             text-align: center;
         }
-
-        #debug {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            font-size: 12px;
-            color: #666;
-            word-break: break-all;
-        }
     </style>
 </head>
 <body>
@@ -173,7 +162,6 @@
                 <div class="plan-description">
                     <li>基本的な仕入れ</li>
                     <li>基本的なコンテンツにアクセス</li>
-                    <li>コミュニティ参加</li>
                 </div>
             </button>
 
@@ -216,8 +204,6 @@
         <div class="error" id="error">
             エラーが発生しました。もう一度お試しください。
         </div>
-
-        <div id="debug"></div>
     </div>
 
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -225,15 +211,6 @@
         const LIFF_ID = '2008358460-7ZLAoV3K';
         let userId = null;
         let referrerId = null;
-
-        // デバッグログ
-        function log(message, data = null) {
-            console.log(`[LunaFlow] ${message}`, data || '');
-            const debugDiv = document.getElementById('debug');
-            const timestamp = new Date().toLocaleTimeString();
-            debugDiv.innerHTML += `<div>[${timestamp}] ${message} ${data ? JSON.stringify(data) : ''}</div>`;
-            debugDiv.style.display = 'block';
-        }
 
         // エラー表示
         function showError(message) {
@@ -245,34 +222,25 @@
         // LIFF初期化
         async function initializeLiff() {
             try {
-                log('LIFF初期化開始', { liffId: LIFF_ID });
-                
                 await liff.init({ liffId: LIFF_ID });
-                log('LIFF初期化成功');
 
                 if (!liff.isLoggedIn()) {
-                    log('未ログイン状態 - ログイン実行');
                     liff.login();
                     return;
                 }
 
-                log('ログイン済み');
-
                 // ユーザーID取得
                 const profile = await liff.getProfile();
                 userId = profile.userId;
-                log('ユーザーID取得', { userId });
 
                 // URLパラメータから紹介者ID取得
                 const urlParams = new URLSearchParams(window.location.search);
                 referrerId = urlParams.get('referrer') || '';
-                log('紹介者ID', { referrerId: referrerId || 'なし' });
 
                 // ボタンイベント設定
                 setupButtons();
 
             } catch (error) {
-                log('LIFF初期化エラー', { error: error.message });
                 showError('初期化に失敗しました: ' + error.message);
             }
         }
@@ -286,8 +254,6 @@
                     const plan = this.getAttribute('data-plan');
                     const stripeUrl = this.getAttribute('data-url');
                     
-                    log('プラン選択', { plan, stripeUrl });
-                    
                     if (!userId) {
                         showError('ユーザーIDが取得できませんでした');
                         return;
@@ -295,19 +261,15 @@
 
                     // Stripe決済ページへリダイレクト
                     const finalUrl = `${stripeUrl}?client_reference_id=${userId}`;
-                    log('Stripeリダイレクト', { finalUrl });
                     
                     document.getElementById('loading').style.display = 'block';
                     window.location.href = finalUrl;
                 });
             });
-
-            log('ボタンイベント設定完了');
         }
 
         // 初期化実行
         window.addEventListener('DOMContentLoaded', () => {
-            log('ページ読み込み完了');
             initializeLiff();
         });
     </script>
