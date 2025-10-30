@@ -28,6 +28,7 @@ h1{font-size:28px;color:#333;margin-bottom:10px;text-align:center}
 .loading{text-align:center;padding:40px}
 .spinner{border:3px solid #f3f3f3;border-top:3px solid #D4AF87;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin:0 auto 20px}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.debug{display:none;margin-top:20px;padding:10px;background:#f0f0f0;border-radius:8px;font-size:12px;word-break:break-all}
 </style>
 </head>
 <body>
@@ -41,21 +42,21 @@ h1{font-size:28px;color:#333;margin-bottom:10px;text-align:center}
 <p class="subtitle">プランを選択して決済に進む</p>
 <div id="error" class="error" style="display:none;"></div>
 <div class="plan-select">
-<div class="plan-option" data-plan="light">
+<div class="plan-option" data-plan="light" data-url="https://buy.stripe.com/test_00wdR90j8fprfVo7pjc7u01">
 <div class="plan-info">
 <div class="plan-name">✨ Light プラン</div>
 <div class="plan-price">¥1,000</div>
 </div>
 <div class="plan-check">✓</div>
 </div>
-<div class="plan-option selected" data-plan="standard">
+<div class="plan-option selected" data-plan="standard" data-url="https://buy.stripe.com/test_5kQ6oHd5U6SV24y9xrc7u00">
 <div class="plan-info">
 <div class="plan-name">💫 Standard プラン</div>
 <div class="plan-price">¥3,000</div>
 </div>
 <div class="plan-check">✓</div>
 </div>
-<div class="plan-option" data-plan="premium">
+<div class="plan-option" data-plan="premium" data-url="https://buy.stripe.com/test_9B6aEXc1Q6SVbF810Vc7u02">
 <div class="plan-info">
 <div class="plan-name">⭐ Premium プラン</div>
 <div class="plan-price">¥5,000</div>
@@ -65,15 +66,18 @@ h1{font-size:28px;color:#333;margin-bottom:10px;text-align:center}
 </div>
 <button class="btn" id="payBtn">決済ページへ進む</button>
 <div class="status" id="status">準備完了</div>
+<div class="debug" id="debug"></div>
 </div>
 </div>
 <script>
-const CONFIG={LIFF_ID:'2008358460-7ZLAoV3K',STRIPE_LINKS:{light:'https://buy.stripe.com/test_00wdR90j8fprfVo7pjc7u01',standard:'https://buy.stripe.com/test_5kQ6oHd5U6SV24y9xrc7u00',premium:'https://buy.stripe.com/test_9B6aEXc1Q6SVbF810Vc7u02'}};
+const LIFF_ID='2008358460-7ZLAoV3K';
 let selectedPlan='standard';
+let selectedUrl='';
 let userProfile=null;
+
 window.onload=async function(){
 try{
-await liff.init({liffId:CONFIG.LIFF_ID});
+await liff.init({liffId:LIFF_ID});
 if(!liff.isLoggedIn()){liff.login();return;}
 userProfile=await liff.getProfile();
 document.getElementById('loading').style.display='none';
@@ -85,43 +89,62 @@ showError('初期化エラー: '+error.message);
 console.error('LIFF Init Error:',error);
 }
 };
+
 function setupPlanSelection(){
 document.querySelectorAll('.plan-option').forEach(option=>{
 option.addEventListener('click',function(){
 document.querySelectorAll('.plan-option').forEach(o=>o.classList.remove('selected'));
 this.classList.add('selected');
 selectedPlan=this.getAttribute('data-plan');
-console.log('Selected plan:',selectedPlan);
+selectedUrl=this.getAttribute('data-url');
+console.log('✅ Selected:',selectedPlan,selectedUrl);
+document.getElementById('debug').textContent='選択: '+selectedPlan;
+document.getElementById('debug').style.display='block';
 });
 });
+
+const firstOption=document.querySelector('.plan-option.selected');
+if(firstOption){
+selectedPlan=firstOption.getAttribute('data-plan');
+selectedUrl=firstOption.getAttribute('data-url');
 }
+}
+
 function setupPaymentButton(){
 document.getElementById('payBtn').addEventListener('click',async function(){
 if(!userProfile){showError('ユーザー情報が取得できませんでした');return;}
+if(!selectedUrl){showError('プランが選択されていません');return;}
+
 this.disabled=true;
 this.textContent='処理中...';
 document.getElementById('status').textContent='Stripeページへ移動中...';
+
 try{
 const urlParams=new URLSearchParams(window.location.search);
 const ref=urlParams.get('ref');
 let referrerId='';
 if(ref){
-try{referrerId=atob(ref);}catch(e){console.error('Ref decode error:',e);}
+try{referrerId=atob(ref);}catch(e){console.error('Ref decode:',e);}
 }
-console.log('Payment details:',{plan:selectedPlan,userId:userProfile.userId,referrerId:referrerId});
-const baseUrl=CONFIG.STRIPE_LINKS[selectedPlan];
-if(!baseUrl){throw new Error('Invalid plan selected');}
-const stripeUrl=baseUrl+'?client_reference_id='+encodeURIComponent(userProfile.userId)+'&metadata[plan]='+encodeURIComponent(selectedPlan)+'&metadata[referrer_id]='+encodeURIComponent(referrerId);
-console.log('Redirecting to:',stripeUrl);
+
+const stripeUrl=selectedUrl+'?client_reference_id='+encodeURIComponent(userProfile.userId)+'&metadata[plan]='+encodeURIComponent(selectedPlan)+'&metadata[referrer_id]='+encodeURIComponent(referrerId);
+
+console.log('🚀 Redirect URL:',stripeUrl);
+document.getElementById('debug').textContent='URL: '+stripeUrl.substring(0,100)+'...';
+
+setTimeout(()=>{
 window.location.href=stripeUrl;
+},500);
+
 }catch(error){
-showError('エラーが発生しました: '+error.message);
+showError('エラー: '+error.message);
 this.disabled=false;
 this.textContent='決済ページへ進む';
 document.getElementById('status').textContent='準備完了';
 }
 });
 }
+
 function showError(message){
 const errorDiv=document.getElementById('error');
 errorDiv.textContent=message;
